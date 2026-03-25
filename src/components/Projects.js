@@ -3,6 +3,14 @@ import { Container, Row, Col, Card, Button, Badge } from "react-bootstrap";
 import './Projects.css';
 
 export default function Projects() {
+  const [newProject, setNewProject] = useState({
+    title: "",
+    description: "",
+    image: "",
+    type: "",
+    tags: ""
+  });
+
   const [projects, setProjects] = useState([
     {
       title: "Portfolio Website",
@@ -38,6 +46,29 @@ export default function Projects() {
     });
   };
 
+  const addProject = (e) => {
+    e.preventDefault();
+    const tags = newProject.tags.split(',').map(t => t.trim()).filter(Boolean);
+    const item = { ...newProject, tags, files: [] };
+
+    setProjects(prev => [...prev, item]);
+    setNewProject({ title: "", description: "", image: "", type: "", tags: "" });
+  };
+
+  const deleteProject = (index) => {
+    setProjects(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const removeFile = (projectIndex, fileIndex) => {
+    setProjects(prev => {
+      const updated = [...prev];
+      const item = { ...updated[projectIndex] };
+      item.files = item.files.filter((_, i) => i !== fileIndex);
+      updated[projectIndex] = item;
+      return updated;
+    });
+  };
+
   return (
     <section className="projects-section" id="projects">
       <Container>
@@ -50,6 +81,60 @@ export default function Projects() {
             </p>
           </Col>
         </Row>
+
+        <Row className="mb-4">
+          <Col>
+            <Card className="p-3 mb-3">
+              <h5>Add New Project</h5>
+              <form onSubmit={addProject}>
+                <div className="mb-2">
+                  <input
+                    className="form-control"
+                    placeholder="Title"
+                    value={newProject.title}
+                    onChange={(e) => setNewProject(prev => ({ ...prev, title: e.target.value }))}
+                    required
+                  />
+                </div>
+                <div className="mb-2">
+                  <textarea
+                    className="form-control"
+                    placeholder="Description"
+                    value={newProject.description}
+                    onChange={(e) => setNewProject(prev => ({ ...prev, description: e.target.value }))}
+                    required
+                  />
+                </div>
+                <div className="mb-2">
+                  <input
+                    className="form-control"
+                    placeholder="Image URL"
+                    value={newProject.image}
+                    onChange={(e) => setNewProject(prev => ({ ...prev, image: e.target.value }))}
+                  />
+                </div>
+                <div className="mb-2">
+                  <input
+                    className="form-control"
+                    placeholder="Type (e.g: photoshop, website)"
+                    value={newProject.type}
+                    onChange={(e) => setNewProject(prev => ({ ...prev, type: e.target.value }))}
+                  />
+                </div>
+                <div className="mb-2">
+                  <input
+                    className="form-control"
+                    placeholder="Tags (comma-separated)"
+                    value={newProject.tags}
+                    onChange={(e) => setNewProject(prev => ({ ...prev, tags: e.target.value }))}
+                  />
+                </div>
+                <button type="submit" className="btn btn-success btn-sm">Add Project</button>
+              </form>
+            </Card>
+          </Col>
+        </Row>
+
         <Row>
           {projects.map((project, idx) => {
             const files = project.files || [];
@@ -89,10 +174,17 @@ export default function Projects() {
                         <small className="text-muted">Uploaded files:</small>
                         <ul className="ps-3 mb-0">
                           {files.map((f, fileIdx) => (
-                            <li key={fileIdx}>
+                            <li key={fileIdx} className="d-flex justify-content-between align-items-center">
                               <a href={f.url} target="_blank" rel="noopener noreferrer">
                                 {f.name}
                               </a>
+                              <button
+                                className="btn btn-sm btn-outline-danger ms-2"
+                                onClick={() => removeFile(idx, fileIdx)}
+                                type="button"
+                              >
+                                Delete
+                              </button>
                             </li>
                           ))}
                         </ul>
@@ -107,7 +199,7 @@ export default function Projects() {
                         variant={files.length > 0 ? "outline-success" : "success"}
                         className="w-100"
                       >
-                        📁 Upload Photoshop/Asset
+                        📁 Upload File
                         <input
                           type="file"
                           hidden
@@ -126,9 +218,18 @@ export default function Projects() {
                           onClick={() => window.open(files[files.length - 1].url, '_blank', 'noopener')}
                           size="sm"
                         >
-                          ⬇️ View Latest Upload ({files[files.length - 1].name})
+                          ⬇️ View Latest ({files[files.length - 1].name})
                         </Button>
                       )}
+
+                      <Button
+                        variant="danger"
+                        className="w-100"
+                        size="sm"
+                        onClick={() => deleteProject(idx)}
+                      >
+                        Delete Project
+                      </Button>
                     </div>
                   </Card.Footer>
                 </Card>
