@@ -1,0 +1,33 @@
+.skills-section {
+  background: #222;
+  color: #fff;
+  padding: 80px 0 60px 0;
+}
+
+.skills-title {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #61dafb;
+  font-weight: bold;
+}
+
+.skills-list {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.skill-item {
+  margin-bottom: 24px;
+}
+
+.skill-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 1.1rem;
+}
+
+.skill-percent {
+  color: #61dafb;
+  font-weight: 600;
+}
