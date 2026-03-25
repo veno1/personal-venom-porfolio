@@ -1,31 +1,15 @@
-import { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Badge, ProgressBar, Alert } from "react-bootstrap";
-import { initializeApp } from 'firebase/app';
-import { getStorage, ref, uploadBytesResumable, getDownloadURL, listAll } from 'firebase/storage';
+import { useState } from 'react';
+import { Container, Row, Col, Card, Button, Badge } from "react-bootstrap";
 import './Projects.css';
 
 export default function Projects() {
-  // Firebase config (get from Firebase Console > Project Settings)
-  const firebaseConfig = {
-    apiKey: "your-api-key",
-    authDomain: "your-project.firebaseapp.com",
-    projectId: "your-project-id",
-    storageBucket: "your-project.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "your-app-id"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const storage = getStorage(app);
-
   const [projects, setProjects] = useState([
     {
       title: "Portfolio Website",
       description: "A personal portfolio website to showcase my skills and projects.",
       image: "/images/portfolio-preview.jpg",
       type: "website",
-      links: [{ label: "Live Site", url: "https://myportfolio.com", download: true }],
+      files: [],
       tags: ["React", "Bootstrap", "Responsive"]
     },
     {
@@ -33,55 +17,25 @@ export default function Projects() {
       description: "Complete Photoshop branding kit including logo, business cards, and mockups.",
       image: "/images/brand-identity-preview.jpg",
       type: "photoshop",
-      links: [{ label: "Download Files", url: "", download: true, uploading: false, progress: 0 }],
+      files: [],
       tags: ["Photoshop", "Branding", "Print Design"]
     }
   ]);
 
-  const [uploading, setUploading] = useState({});
-  const [uploadProgress, setUploadProgress] = useState({});
-
-  // Upload file to Firebase Storage
-  const uploadFile = async (projectIndex, file) => {
+  // Upload file locally using object URL (no backend)
+  const uploadFile = (projectIndex, file) => {
     if (!file) return;
 
-    const projectRef = ref(storage, `portfolio/${projects[projectIndex].title}/${file.name}`);
-    
-    setUploading(prev => ({ ...prev, [projectIndex]: true }));
-    setUploadProgress(prev => ({ ...prev, [projectIndex]: 0 }));
+    const objectUrl = URL.createObjectURL(file);
 
-    const uploadTask = uploadBytesResumable(projectRef, file);
-
-    uploadTask.on('state_changed',
-      (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setUploadProgress(prev => ({ ...prev, [projectIndex]: progress }));
-      },
-      (error) => {
-        console.error('Upload failed:', error);
-        setUploading(prev => ({ ...prev, [projectIndex]: false }));
-        alert('Upload failed!');
-      },
-      async () => {
-        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-        
-        // Update project with download URL
-        setProjects(prev => {
-          const updated = [...prev];
-          updated[projectIndex].links[0].url = downloadURL;
-          updated[projectIndex].links[0].filename = file.name;
-          return updated;
-        });
-
-        setUploading(prev => ({ ...prev, [projectIndex]: false }));
-        setUploadProgress(prev => ({ ...prev, [projectIndex]: 100 }));
-        
-        // Reset progress after 2 seconds
-        setTimeout(() => {
-          setUploadProgress(prev => ({ ...prev, [projectIndex]: 0 }));
-        }, 2000);
-      }
-    );
+    setProjects(prev => {
+      const updated = [...prev];
+      const target = { ...updated[projectIndex] };
+      const existingFiles = target.files || [];
+      target.files = [...existingFiles, { name: file.name, url: objectUrl, local: true }];
+      updated[projectIndex] = target;
+      return updated;
+    });
   };
 
   return (
@@ -98,10 +52,7 @@ export default function Projects() {
         </Row>
         <Row>
           {projects.map((project, idx) => {
-            const link = project.links[0];
-            const isUploading = uploading[idx];
-            const progress = uploadProgress[idx] || 0;
-            const hasFile = link.url && !isUploading;
+            const files = project.files || [];
 
             return (
               <Col md={6} lg={4} xl={3} sm={6} xs={12} key={idx} className="mb-4">
@@ -132,54 +83,50 @@ export default function Projects() {
                         ))}
                       </div>
                     )}
+
+                    {files.length > 0 && (
+                      <div className="mb-2">
+                        <small className="text-muted">Uploaded files:</small>
+                        <ul className="ps-3 mb-0">
+                          {files.map((f, fileIdx) => (
+                            <li key={fileIdx}>
+                              <a href={f.url} target="_blank" rel="noopener noreferrer">
+                                {f.name}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </Card.Body>
                   
                   <Card.Footer className="bg-transparent border-0 pt-0">
                     <div className="d-flex flex-column gap-2">
-                      {/* Upload Button / File Input */}
                       <Button
                         as="label"
-                        variant={hasFile ? "outline-success" : "success"}
+                        variant={files.length > 0 ? "outline-success" : "success"}
                         className="w-100"
-                        disabled={isUploading}
                       >
-                        {isUploading 
-                          ? `Uploading... ${Math.round(progress)}%` 
-                          : hasFile 
-                            ? `✅ ${link.filename || 'File Ready'}` 
-                            : '📁 Upload Files'
-                        }
+                        📁 Upload Photoshop/Asset
                         <input
                           type="file"
                           hidden
                           multiple
-                          accept=".zip,.rar,.pdf,image/*"
-                          onChange={(e) => uploadFile(idx, e.target.files[0])}
-                          disabled={isUploading}
+                          accept=".psd,.ai,.eps,.zip,.rar,.pdf,image/*"
+                          onChange={(e) => {
+                            if (e.target.files.length > 0) uploadFile(idx, e.target.files[0]);
+                          }}
                         />
                       </Button>
 
-                      {/* Progress Bar */}
-                      {isUploading && (
-                        <ProgressBar 
-                          now={progress} 
-                          className="w-100" 
-                          variant="success"
-                          label={`${Math.round(progress)}%`}
-                        />
-                      )}
-
-                      {/* Download Button */}
-                      {hasFile && (
+                      {files.length > 0 && (
                         <Button
                           variant="info"
-                          href={link.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          size="sm"
                           className="w-100"
+                          onClick={() => window.open(files[files.length - 1].url, '_blank', 'noopener')}
+                          size="sm"
                         >
-                          ⬇️ Download {link.filename || 'Files'}
+                          ⬇️ View Latest Upload ({files[files.length - 1].name})
                         </Button>
                       )}
                     </div>
