@@ -11,39 +11,60 @@ export default function Projects() {
     tags: ""
   });
 
-  const [projects, setProjects] = useState([
-    {
-      title: "Portfolio Website",
-      description: "A personal portfolio website to showcase my skills and projects.",
-      image: "/images/portfolio-preview.jpg",
-      type: "website",
-      files: [],
-      tags: ["React", "Bootstrap", "Responsive"]
-    },
-    {
-      title: "Brand Identity Design",
-      description: "Complete Photoshop branding kit including logo, business cards, and mockups.",
-      image: "/images/brand-identity-preview.jpg",
-      type: "photoshop",
-      files: [],
-      tags: ["Photoshop", "Branding", "Print Design"]
+  const [projects, setProjects] = useState(() => {
+    const saved = localStorage.getItem('portfolio_projects');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return getDefaultProjects();
+      }
     }
-  ]);
+    return getDefaultProjects();
+  });
 
-  // Upload file locally using object URL (no backend)
+  function getDefaultProjects() {
+    return [
+      {
+        title: "Portfolio Website",
+        description: "A personal portfolio website to showcase my skills and projects.",
+        image: "/images/portfolio-preview.jpg",
+        type: "website",
+        files: [],
+        tags: ["React", "Bootstrap", "Responsive"]
+      },
+      {
+        title: "Brand Identity Design",
+        description: "Complete Photoshop branding kit including logo, business cards, and mockups.",
+        image: "/images/brand-identity-preview.jpg",
+        type: "photoshop",
+        files: [],
+        tags: ["Photoshop", "Branding", "Print Design"]
+      }
+    ];
+  }
+
+  const saveProjects = (updatedProjects) => {
+    setProjects(updatedProjects);
+    localStorage.setItem('portfolio_projects', JSON.stringify(updatedProjects));
+  };
+
+  // Upload file locally using base64 encoding for persistence
   const uploadFile = (projectIndex, file) => {
     if (!file) return;
 
-    const objectUrl = URL.createObjectURL(file);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64Data = e.target.result;
 
-    setProjects(prev => {
-      const updated = [...prev];
+      const updated = [...projects];
       const target = { ...updated[projectIndex] };
       const existingFiles = target.files || [];
-      target.files = [...existingFiles, { name: file.name, url: objectUrl, local: true }];
+      target.files = [...existingFiles, { name: file.name, data: base64Data }];
       updated[projectIndex] = target;
-      return updated;
-    });
+      saveProjects(updated);
+    };
+    reader.readAsDataURL(file);
   };
 
   const addProject = (e) => {
@@ -51,22 +72,22 @@ export default function Projects() {
     const tags = newProject.tags.split(',').map(t => t.trim()).filter(Boolean);
     const item = { ...newProject, tags, files: [] };
 
-    setProjects(prev => [...prev, item]);
+    const updated = [...projects, item];
+    saveProjects(updated);
     setNewProject({ title: "", description: "", image: "", type: "", tags: "" });
   };
 
   const deleteProject = (index) => {
-    setProjects(prev => prev.filter((_, i) => i !== index));
+    const updated = projects.filter((_, i) => i !== index);
+    saveProjects(updated);
   };
 
   const removeFile = (projectIndex, fileIndex) => {
-    setProjects(prev => {
-      const updated = [...prev];
-      const item = { ...updated[projectIndex] };
-      item.files = item.files.filter((_, i) => i !== fileIndex);
-      updated[projectIndex] = item;
-      return updated;
-    });
+    const updated = [...projects];
+    const item = { ...updated[projectIndex] };
+    item.files = item.files.filter((_, i) => i !== fileIndex);
+    updated[projectIndex] = item;
+    saveProjects(updated);
   };
 
   return (
@@ -171,19 +192,19 @@ export default function Projects() {
 
                     {files.length > 0 && (
                       <div className="mb-2">
-                        <small className="text-muted">Uploaded files:</small>
+                        <small className="text-muted">📦 Files ({files.length}):</small>
                         <ul className="ps-3 mb-0">
                           {files.map((f, fileIdx) => (
-                            <li key={fileIdx} className="d-flex justify-content-between align-items-center">
-                              <a href={f.url} target="_blank" rel="noopener noreferrer">
-                                {f.name}
-                              </a>
+                            <li key={fileIdx} className="d-flex justify-content-between align-items-center mt-1">
+                              <span className="text-truncate">
+                                <strong>{f.name}</strong>
+                              </span>
                               <button
                                 className="btn btn-sm btn-outline-danger ms-2"
                                 onClick={() => removeFile(idx, fileIdx)}
                                 type="button"
                               >
-                                Delete
+                                ✕
                               </button>
                             </li>
                           ))}
@@ -210,17 +231,6 @@ export default function Projects() {
                           }}
                         />
                       </Button>
-
-                      {files.length > 0 && (
-                        <Button
-                          variant="info"
-                          className="w-100"
-                          onClick={() => window.open(files[files.length - 1].url, '_blank', 'noopener')}
-                          size="sm"
-                        >
-                          ⬇️ View Latest ({files[files.length - 1].name})
-                        </Button>
-                      )}
 
                       <Button
                         variant="danger"
