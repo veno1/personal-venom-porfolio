@@ -97,7 +97,7 @@ export default function Projects() {
           <Col>
             <h2 className="heading-1">Projects</h2>
             <p>
-              <span className="highlight">Venom</span> has worked on various projects, showcasing skills in front-end development, 
+              <span className="highlight">Venom's new</span> has worked on various projects, showcasing skills in front-end development, 
               Photoshop design, and digital assets.
             </p>
           </Col>
