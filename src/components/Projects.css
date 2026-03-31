@@ -1,362 +1,168 @@
-/* Projects Section */
+/* Container & General */
 .projects-section {
-  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+  background: #181818;
   color: #fff;
-  padding: 80px 20px 60px;
-  min-height: 100vh;
-}
-
-.container {
+  padding: 80px 20px 60px 20px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* Section Header */
-.section-header {
-  text-align: center;
-  margin-bottom: 50px;
-}
-
-.section-title {
+.heading-1 {
   font-size: 2.5rem;
-  font-weight: 700;
+  margin-bottom: 24px;
+  font-weight: bold;
   color: #61dafb;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  text-align: center;
 }
 
-.section-subtitle {
-  font-size: 1rem;
-  color: #aaa;
-  font-weight: 300;
-}
-
-/* Admin Panel */
-.admin-panel {
-  background: #1a1a1a;
-  border: 2px solid #333;
-  border-radius: 12px;
-  padding: 30px;
-  margin-bottom: 50px;
-}
-
-.admin-header {
+/* Language Switcher */
+.lang-switch {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
   margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #333;
 }
 
-.admin-header h3 {
-  margin: 0;
+.lang-switch button {
+  background: transparent;
+  border: 1px solid #61dafb;
   color: #61dafb;
-  font-size: 1.3rem;
-}
-
-.btn-toggle {
-  background: linear-gradient(135deg, #61dafb 0%, #00b4d8 100%);
-  color: #000;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 20px;
-  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 0.3s;
 }
 
-.btn-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(97, 218, 251, 0.4);
+.lang-switch button:hover, .lang-switch button.active {
+  background: #61dafb;
+  color: #181818;
 }
 
 /* Admin Form */
-.admin-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-}
-
-.admin-form input,
-.admin-form textarea {
-  grid-column: span 1;
-  background: #222;
-  border: 1px solid #444;
-  color: #fff;
-  padding: 12px 15px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-}
-
-.admin-form input:focus,
-.admin-form textarea:focus {
-  outline: none;
-  border-color: #61dafb;
-  background: #2a2a2a;
-  box-shadow: 0 0 0 3px rgba(97, 218, 251, 0.1);
-}
-
-.admin-form textarea {
-  grid-column: span 2;
-  resize: vertical;
-  min-height: 80px;
-}
-
-.image-upload {
-  grid-column: span 2;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 15px;
+.project-form {
   background: #111;
-  border: 2px dashed #444;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 40px;
+  display: grid;
+  gap: 15px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.image-upload:hover {
-  border-color: #61dafb;
-  background: #1a1a1a;
-}
-
-.image-upload label {
-  color: #61dafb;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.image-upload input[type="file"] {
-  flex: 1;
-  cursor: pointer;
-  padding: 8px 12px;
-  background: #222;
+.project-form input, 
+.project-form textarea {
+  padding: 12px;
   border: 1px solid #444;
-}
-
-.image-preview {
-  grid-column: span 2;
-  background: #222;
-  padding: 15px;
   border-radius: 8px;
-  text-align: center;
+  background: #1a1a1a;
+  color: #fff;
+  width: 100%;
 }
 
-.image-preview img {
-  max-width: 100%;
-  max-height: 200px;
-  border-radius: 6px;
+.upload-box {
+  border: 2px dashed #444;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+  color: #888;
+  cursor: pointer;
+}
+
+.preview-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
   margin-top: 10px;
 }
 
-.btn-submit {
-  grid-column: span 2;
-  background: linear-gradient(135deg, #61dafb 0%, #00b4d8 100%);
-  color: #000;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-submit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(97, 218, 251, 0.3);
-}
-
 /* Projects Grid */
-.projects-grid {
+.project-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
 }
 
-.no-projects {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 60px 20px;
-  background: #1a1a1a;
-  border-radius: 12px;
-  border: 1px solid #333;
-}
-
-.no-projects p {
-  font-size: 1.1rem;
-  color: #aaa;
-  margin: 10px 0;
-}
-
-/* Project Card */
+/* Individual Card */
 .project-card {
-  background: #1a1a1a;
-  border: 1px solid #333;
+  background: #222;
   border-radius: 12px;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  height: 100%;
 }
 
 .project-card:hover {
-  border-color: #61dafb;
   transform: translateY(-8px);
-  box-shadow: 0 15px 40px rgba(97, 218, 251, 0.2);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-.project-image {
+.project-card img {
   width: 100%;
-  height: 220px;
-  overflow: hidden;
-  background: #111;
-}
-
-.project-image img {
-  width: 100%;
-  height: 100%;
+  height: 200px;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  cursor: zoom-in;
 }
 
-.project-card:hover .project-image img {
-  transform: scale(1.05);
+.project-card-content {
+  padding: 16px;
+  flex-grow: 1;
 }
 
-.project-content {
-  padding: 20px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.project-content h3 {
+.project-card h3 {
   margin: 0 0 10px 0;
-  font-size: 1.3rem;
-  color: #fff;
-  font-weight: 700;
+  color: #61dafb;
 }
 
-.project-type {
-  display: inline-block;
-  background: linear-gradient(135deg, #61dafb 0%, #00b4d8 100%);
-  color: #000;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  width: fit-content;
-  margin-bottom: 10px;
-}
-
-.project-description {
-  color: #bbb;
+.project-card p {
   font-size: 0.95rem;
+  color: #ccc;
   line-height: 1.5;
-  margin: 0 0 15px 0;
-  flex: 1;
 }
 
-.project-tags {
+/* Admin Controls in Card */
+.admin-controls {
+  padding: 12px;
+  background: rgba(0,0,0,0.2);
   display: flex;
-  flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 15px;
 }
 
-.tag {
-  background: #333;
-  color: #aaa;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  transition: all 0.2s ease;
-}
-
-.tag:hover {
-  background: #61dafb;
-  color: #000;
-}
-
-.btn-delete {
-  background: #ff4d4f;
-  color: #fff;
+.admin-controls button {
+  flex: 1;
+  padding: 8px;
   border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  align-self: flex-start;
+  background: #333;
+  color: white;
 }
 
-.btn-delete:hover {
-  background: #ff7875;
-  transform: scale(1.05);
+.admin-controls button:hover {
+  background: #444;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .projects-section {
-    padding: 60px 15px 40px;
-  }
-
-  .section-title {
-    font-size: 2rem;
-  }
-
-  .admin-form {
-    grid-template-columns: 1fr;
-  }
-
-  .admin-form textarea,
-  .image-upload,
-  .image-preview,
-  .btn-submit {
-    grid-column: span 1 !important;
-  }
-
-  .admin-header {
-    flex-direction: column;
-    gap: 15px;
-    align-items: flex-start;
-  }
-
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .project-image {
-    height: 180px;
-  }
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  cursor: zoom-out;
 }
 
-@media (max-width: 480px) {
-  .section-title {
-    font-size: 1.8rem;
-  }
-
-  .admin-panel {
-    padding: 20px;
-  }
-
-  .project-card {
-    border-radius: 8px;
-  }
-
-  .project-image {
-    height: 150px;
-  }
-
-  .project-content {
-    padding: 15px;
-  }
-
-  .project-content h3 {
-    font-size: 1.1rem;
-  }
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
 }
