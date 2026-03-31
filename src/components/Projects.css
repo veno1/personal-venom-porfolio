@@ -1,153 +1,149 @@
 .projects-section {
-  background: #181818;
-  color: #fff;
-  padding: 80px 0 60px 0;
+    padding: 4rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
-.heading-1 {
-  font-size: 2rem;
-  margin-bottom: 18px;
-  font-weight: bold;
-  color: #61dafb;
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
 }
 
-.highlight {
-  color: #61dafb;
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
 }
 
-.project-card {
-  background: #222;
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-  transition: transform 0.2s;
-}
-.project-images-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  padding: 6px;
+.toggle-form-btn {
+    background: #6366f1;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
 }
 
-.project-multi-image {
-  width: 100%;
-  height: 110px;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-.project-card:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 6px 24px rgba(0,0,0,0.25);
-}
-
-.project-card .btn-info {
-  background: #61dafb;
-  color: #181818;
-  border: none;
-  font-weight: 600;
-  border-radius: 20px;
-  transition: background 0.2s, color 0.2s;
-}
-
-.project-card .btn-info:hover {
-    background: #fff;
-    color: #181818;
-  }
-  .project-card {
-  transition: all 0.3s ease;
-  border: none;
-}
-
-.project-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
-}
-
-.project-image {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-}
-
-.project-title {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  font-size: 1.1rem;
-}
-
-.project-card-content {
-  padding: 12px;
+.toggle-form-btn:hover {
+    background: #4f46e5;
+    transform: translateY(-2px);
 }
 
 .project-form {
-  background: #111;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 24px;
-  display: grid;
-  gap: 12px;
+    background: #f8fafc;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    border: 1px solid #e2e8f0;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-.form-group input {
-  padding: 8px 10px;
-  border: 1px solid #444;
-  border-radius: 8px;
-  background: #1a1a1a;
-  color: #fff;
+.form-group label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.95rem;
 }
 
-.add-button,
-.delete-button {
-  cursor: pointer;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: none;
-  background: #61dafb;
-  color: #181818;
-  font-weight: 600;
+.form-group input,
+.form-group textarea {
+    padding: 0.75rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
 }
 
-.delete-button {
-  background: #ff4d4f;
-  color: #fff;
-  margin-top: 10px;
-}
-
-.add-button:hover,
-.delete-button:hover {
-  opacity: 0.9;
-}
-
-.error-message {
-  color: #ff6b6b;
-  font-size: 0.9rem;
-}
-
-.project-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 14px;
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
 .preview-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    border: 2px dashed #d1d5db;
+    text-align: center;
 }
 
-.preview-wrapper img {
-  width: 100%;
-  border-radius: 10px;
+.preview-image {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.preview-image:hover {
+    transform: scale(1.02);
+}
+
+.error-message {
+    background: #fef2f2;
+    color: #dc2626;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border-left: 4px solid #dc2626;
+    margin: 1rem 0;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.add-button, .cancel-button {
+    padding: 0.875rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.add-button {
+    background: #10b981;
+    color: white;
+    flex: 1;
+}
+
+.add-button:hover {
+    background: #059669;
+}
+
+.cancel-button {
+    background: #6b7280;
+    color: white;
+}
+
+.cancel-button:hover {
+    background: #4b5563;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #6b7280;
+    font-size: 1.1rem;
 }
