@@ -18,14 +18,16 @@ export default function About() {
   </strong>
 </span>
               <p>
-                Hello! I'm <strong>Kadji Sonny (Venom)</strong>, a passionate Front End Developer with experience in building modern, responsive web applications using React, JavaScript, and Bootstrap. <br /><br />
-                I love creating beautiful Graphics as i also perform Graphic Designing, and I'm always eager to learn new technologies and improve my skills.
+                Hello! I'm <strong>Kadji Sonny (Venom)</strong>, a passionate Graphic Designer, Front-End Developer, and Community Manager with a keen eye for aesthetics and a love for creating compelling visual narratives. With expertise in Adobe Creative Suite, modern design principles, and web technologies, I bring ideas to life through stunning visuals and interactive experiences.<br /><br />
+                My work spans branding, digital art, print design, UI/UX, responsive web development, and community growth—always aiming to create designs and applications that not only look beautiful but also communicate effectively and provide excellent user experiences.
               </p>
               <ul className="about-list">
-                <li>🌐 React, JavaScript, HTML, CSS</li>
-                <li>⚡ Graphic Designer</li>
-                <li>🚀 Fast Learner & Team Player</li>
-                <li>Bootstrap</li>
+                <li>🎨 Adobe Creative Suite (Photoshop, Illustrator, InDesign)</li>
+                <li>🌐 React, HTML, CSS, JavaScript</li>
+                <li>⚡ Brand Identity & Logo Design</li>
+                <li>🚀 Digital & Print Design Specialist</li>
+                <li>👥 Community Management & Collaboration</li>
+                <li>💡 Full-Stack Creative Professional</li>
               </ul>
               
             </div>
