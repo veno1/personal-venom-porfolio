@@ -4,9 +4,7 @@ import './Projects.css';
 
 const LOCAL_STORAGE_KEY = 'portfolio_projects';
 
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-  setProjects(updated);
-};
+
 export default function Projects() {
 
   // 🔐 ADMIN MODE (hidden via URL)
