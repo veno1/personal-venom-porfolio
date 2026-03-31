@@ -67,7 +67,7 @@ export function NavBar() {
         </Nav>
         <span className="navbar-text" style={{ display: 'flex', alignItems: 'center' }}>
           <a
-            href="https://github.com/"
+            href="https://github.com/veno1/"
             target="_blank"
             rel="noopener noreferrer"
             style={{ marginRight: '10px' }}
