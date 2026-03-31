@@ -7,9 +7,18 @@ const ProjectCard = ({ project, onDelete }) => {
 
     return (
         <div className="project-card">
-            <h2>{project.name}</h2>
-            <p>{project.description}</p>
-            <button onClick={handleDelete}>Delete</button>
+            {project.image && (
+                <img
+                    className="project-image"
+                    src={project.image}
+                    alt={project.name}
+                />
+            )}
+            <div className="project-card-content">
+                <h2 className="project-title">{project.name}</h2>
+                <p>{project.description || 'No description provided.'}</p>
+                <button className="delete-button" onClick={handleDelete}>Delete</button>
+            </div>
         </div>
     );
 };
