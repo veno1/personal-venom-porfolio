@@ -5,129 +5,187 @@ import grillImage from './grill.png';
 import salonImage from './salon hair.png';
 import yogurtImage from './mlky.png';
 
+const DEFAULT_PROJECTS = [
+    { id: 1, name: "Djima's Grill", description: 'Restaurant branding covering food-first style.', image: grillImage },
+    { id: 2, name: "Degeners Hair Salon", description: 'Luxury beauty brand identity.', image: salonImage },
+    { id: 3, name: "Onam Yogurt Design", description: 'Creative drink packaging design.', image: yogurtImage }
+];
+
+const translations = {
+    en: {
+        title: "Projects",
+        add: "Add Project",
+        update: "Update Project",
+        name: "Project Name",
+        desc: "Description",
+        upload: "Project Image",
+        drag: "Drag & Drop Image Here",
+        preview: "Preview"
+    },
+    fr: {
+        title: "Projets",
+        add: "Ajouter un projet",
+        update: "Modifier le projet",
+        name: "Nom du projet",
+        desc: "Description",
+        upload: "Image du projet",
+        drag: "Glissez-déposez une image ici",
+        preview: "Aperçu"
+    }
+};
+
 const Projects = () => {
-    const [projects, setProjects] = useState([
-        { id: 1, name: "Djima's Grill", description: 'Restaurant branding covering food-first style.', image: grillImage },
-        { id: 2, name: "Degeners Hair Salon", description: 'Beauty brand design for a high-end salon.', image: salonImage },
-        { id: 3, name: "Onam's Design Liquid Yogurt", description: 'Creative drink packaging design.', image: yogurtImage }
-    ]);
+
+    const [lang, setLang] = useState("en");
+    const t = translations[lang];
+
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [editingId, setEditingId] = useState(null);
+
+    useEffect(() => {
+        if (window.location.hash === "#admin") {
+            setIsAdmin(true);
+        }
+    }, []);
+
+    const [projects, setProjects] = useState(DEFAULT_PROJECTS);
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [imageData, setImageData] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
-    const [previewImage, setPreviewImage] = useState('');
+
+    const [lightbox, setLightbox] = useState(null);
 
     useEffect(() => {
-        const storedProjects = JSON.parse(localStorage.getItem('projects'));
-        if (storedProjects) {
-            setProjects(storedProjects);
-        }
+        const stored = JSON.parse(localStorage.getItem('projects'));
+        if (stored) setProjects(stored);
     }, []);
 
-    const saveProjects = (updatedProjects) => {
-        setProjects(updatedProjects);
-        localStorage.setItem('projects', JSON.stringify(updatedProjects));
+    const saveProjects = (data) => {
+        setProjects(data);
+        localStorage.setItem('projects', JSON.stringify(data));
     };
 
-    const addProject = (e) => {
+    const handleUpload = (file) => {
+        const reader = new FileReader();
+        reader.onloadend = () => setImageData(reader.result);
+        reader.readAsDataURL(file);
+    };
+
+    const submit = (e) => {
         e.preventDefault();
-        if (!name.trim()) {
-            setErrorMessage('Project name is required.');
-            return;
-        }
 
         const image = imageData || yogurtImage;
 
-        const newProject = {
-            id: Date.now(),
-            name: name.trim(),
-            description: description.trim() || 'No description provided yet.',
-            image,
-        };
-
-        const updatedProjects = [...projects, newProject];
-        saveProjects(updatedProjects);
+        if (editingId) {
+            saveProjects(projects.map(p =>
+                p.id === editingId ? { ...p, name, description, image } : p
+            ));
+        } else {
+            saveProjects([
+                ...projects,
+                { id: Date.now(), name, description, image }
+            ]);
+        }
 
         setName('');
         setDescription('');
         setImageData('');
-        setPreviewImage('');
-        setErrorMessage('');
+        setEditingId(null);
     };
 
-    const handleImageUpload = (event) => {
-        const file = event.target.files[0];
-        if (!file) {
-            setImageData('');
-            setPreviewImage('');
-            return;
-        }
+    const edit = (p) => {
+        setName(p.name);
+        setDescription(p.description);
+        setImageData(p.image);
+        setEditingId(p.id);
+    };
 
-        if (!file.type.startsWith('image/')) {
-            setErrorMessage('Please upload a valid image file.');
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setImageData(reader.result);
-            setPreviewImage(reader.result);
-            setErrorMessage('');
-        };
-        reader.readAsDataURL(file);
+    const move = (i, dir) => {
+        const arr = [...projects];
+        const j = i + dir;
+        if (j < 0 || j >= arr.length) return;
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+        saveProjects(arr);
     };
 
     return (
-        <section className="projects-section" id="projects">
-            <h1 className="heading-1">Projects</h1>
+        <section className="projects-section">
 
-            <form className="project-form" onSubmit={addProject}>
-                <div className="form-group">
-                    <label htmlFor="name">Project Name</label>
+            {/* 🌍 LANGUAGE SWITCH */}
+            <div className="lang-switch">
+                <button onClick={() => setLang("en")}>EN</button>
+                <button onClick={() => setLang("fr")}>FR</button>
+            </div>
+
+            <h1 className="heading-1">{t.title}</h1>
+
+            {/* ADMIN FORM */}
+            {isAdmin && (
+                <form className="project-form" onSubmit={submit}>
+
                     <input
-                        id="name"
+                        placeholder={t.name}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder="Enter project title"
                     />
-                </div>
 
-                <div className="form-group">
-                    <label htmlFor="description">Description</label>
                     <input
-                        id="description"
+                        placeholder={t.desc}
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        placeholder="Short project description"
                     />
-                </div>
 
-                <div className="form-group">
-                    <label htmlFor="image">Project Image</label>
-                    <input id="image" type="file" accept="image/*" onChange={handleImageUpload} />
-                </div>
-
-                {previewImage && (
-                    <div className="preview-wrapper">
-                        <span>Preview</span>
-                        <img className="project-image" src={previewImage} alt="Preview" />
+                    <div
+                        className="upload-box"
+                        onDrop={(e) => {
+                            e.preventDefault();
+                            handleUpload(e.dataTransfer.files[0]);
+                        }}
+                        onDragOver={(e) => e.preventDefault()}
+                    >
+                        {t.drag}
                     </div>
-                )}
 
-                {errorMessage && <p className="error-message">{errorMessage}</p>}
+                    <input type="file" onChange={(e) => handleUpload(e.target.files[0])} />
 
-                <button className="add-button" type="submit">Add Project</button>
-            </form>
+                    {imageData && (
+                        <img src={imageData} className="preview-img" />
+                    )}
 
-            <div className="project-list">
-                {projects.length === 0 ? (
-                    <p>No projects yet. Add one with the form above.</p>
-                ) : projects.map(project => (
-                    // ❌ REMOVED onDelete prop - No delete button
-                    <ProjectCard key={project.id} project={project} />
+                    <button>{editingId ? t.update : t.add}</button>
+
+                </form>
+            )}
+
+            {/* PROJECT GRID */}
+            <div className="project-grid">
+                {projects.map((p, i) => (
+                    <div key={p.id} className="project-card fade-in">
+
+                        <img src={p.image} onClick={() => setLightbox(p.image)} />
+
+                        <h3>{p.name}</h3>
+                        <p>{p.description}</p>
+
+                        {isAdmin && (
+                            <div className="admin-controls">
+                                <button onClick={() => edit(p)}>✏️</button>
+                                <button onClick={() => move(i, -1)}>↑</button>
+                                <button onClick={() => move(i, 1)}>↓</button>
+                            </div>
+                        )}
+                    </div>
                 ))}
             </div>
+
+            {/* 🔍 LIGHTBOX */}
+            {lightbox && (
+                <div className="lightbox" onClick={() => setLightbox(null)}>
+                    <img src={lightbox} />
+                </div>
+            )}
+
         </section>
     );
 };
