@@ -3,13 +3,7 @@ import { Container, Row, Col, Card, Button, Badge } from "react-bootstrap";
 import './Projects.css';
 
 const LOCAL_STORAGE_KEY = 'portfolio_projects';
-const MAX_TOTAL_STORAGE_BYTES = 4.2 * 1024 * 1024;
-const saveProjects = (updated) => {
-  const currentSize = new Blob([JSON.stringify(updated)]).size;
-  if (currentSize > MAX_TOTAL_STORAGE_BYTES) {
-    alert('Storage limit exceeded!');
-    return;
-  }
+
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
   setProjects(updated);
 };
